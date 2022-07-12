@@ -1,0 +1,17 @@
+.nav_bar--wraper {
+}
+
+.navbar_list_category {
+  .navbar_list_category--item {
+    & > .link {
+      color: black;
+      transition: all 0.2s linear;
+      border-radius: 8px;
+      &:hover,
+      &.active {
+        color: #fff;
+        background-color: rgb(49, 13, 126);
+      }
+    }
+  }
+}

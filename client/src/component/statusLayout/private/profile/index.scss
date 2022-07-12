@@ -1,0 +1,17 @@
+.profile_avatar--item {
+  bottom: -50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  border: 5px solid #fff;
+}
+
+.icon_update-image {
+  bottom: 0%;
+  left: 95%;
+  transform: translateX(-100%);
+  background: #fff;
+  border-radius: 100%;
+  border: 3px solid;
+  display: flex;
+  cursor: pointer;
+}

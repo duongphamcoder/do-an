@@ -1,0 +1,54 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url("https://fonts.googleapis.com/css2?family=Roboto&display=swap");
+
+* {
+  font-family: "Roboto", sans-serif;
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+  text-decoration: none;
+}
+
+:root {
+  --color_main: #ef4444;
+}
+
+a {
+  text-decoration: none !important;
+}
+
+html {
+  overflow-x: hidden;
+}
+
+html::-webkit-scrollbar {
+  width: 8px;
+  overflow: visible;
+}
+
+/* Track */
+html::-webkit-scrollbar-track {
+  box-shadow: inset 0 0 5px rgb(203, 200, 200);
+  border-radius: 10px;
+}
+
+/* Handle */
+html::-webkit-scrollbar-thumb {
+  background: var(--color_main);
+  border-radius: 10px;
+}
+
+/* Handle on hover */
+html::-webkit-scrollbar-thumb:hover {
+  background: var(--color_main);
+}
+
+.bg-image {
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-clip: border-box;
+}

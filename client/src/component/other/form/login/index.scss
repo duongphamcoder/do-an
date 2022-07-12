@@ -1,0 +1,33 @@
+.admin_login--wraper {
+  height: 100vh;
+  background: linear-gradient(145deg, #62bcfc, #a7adee);
+
+  & > .admin_login--form-wraper,
+  .admin_login--form-image,
+  .admin_login--form-items {
+    // width: 800px;
+    height: 600px;
+  }
+  .admin_login--form-wraper {
+    width: 1000px;
+    overflow: hidden !important;
+  }
+
+  .admin_login--form-image {
+    & > img {
+      object-fit: contain;
+    }
+  }
+}
+
+.admin_login--form-items-input-item {
+  background-color: #eae8ff;
+}
+
+.admin_login--form-items-control-item-btn {
+  background: linear-gradient(145deg, #5dbafc, #9ea6f8);
+  transition: all 0.2s linear;
+  &:hover {
+    background: linear-gradient(145deg, #33a5f7, #919af8);
+  }
+}

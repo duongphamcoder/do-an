@@ -1,0 +1,30 @@
+.detail_product--image {
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-clip: border-box;
+}
+
+.detail_product--infor-desc {
+  height: 100px;
+  overflow-y: scroll;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+.detail_product--infor-btn > span {
+  background-color: var(--color_main);
+  border-radius: 8px;
+  transition: all 0.2s linear;
+}
+
+.detail_product--infor-sizes-item.active {
+  background-color: rgb(100 116 139);
+  color: white;
+}
+
+.detail_product--infor-sizes-details {
+  transition: all 0.2s linear;
+}

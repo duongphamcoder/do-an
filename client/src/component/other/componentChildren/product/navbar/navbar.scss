@@ -1,0 +1,14 @@
+.admin_nav_product--wraper {
+}
+
+.admin_nav_product-list--item {
+  transition: all 0.2s linear;
+  cursor: pointer;
+  &.active {
+    background-color: #fff;
+  }
+}
+
+.admin_nav_product-list--item-overlay {
+  padding: 0;
+}

@@ -1,0 +1,110 @@
+.form_page {
+  width: 650px;
+  min-height: 600px;
+  position: relative;
+
+  & > .go_back_form {
+    position: absolute;
+    font-size: 25px;
+    font-weight: 800;
+    top: 0;
+    left: 0;
+    padding: 20px;
+    color: black;
+
+    & > ion-icon {
+      cursor: pointer;
+    }
+  }
+}
+
+.btn_item {
+  // background-color: black;
+  margin: auto;
+  border: 1px solid #ccc;
+  border-radius: 25px;
+  padding: 10px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  & > .btn_icon {
+    display: flex;
+    align-items: center;
+    font-size: 20px;
+  }
+
+  & > .btn_text {
+    flex: 1;
+    text-align: center;
+    color: rgb(44, 41, 41);
+    font-weight: 600;
+  }
+
+  &:hover {
+    background-color: #ccc;
+  }
+}
+
+.login_email_wraper {
+  & > .form_email_login {
+  }
+}
+
+.form_email_item {
+  border: 1px solid #ccc;
+  border-radius: 25px;
+  overflow: hidden;
+  background-color: #f1f1f2;
+  margin: 10px auto;
+  & > input {
+    border: none;
+    outline: none;
+    padding: 8px 15px;
+    background-color: transparent;
+  }
+}
+
+.btn_login_email {
+  margin: 15px auto 20px;
+  background: linear-gradient(to right, #94e8f6, #92ede8);
+  text-transform: uppercase;
+  padding: 10px;
+  border-radius: 8px;
+  text-align: center;
+  color: #fff;
+  cursor: pointer;
+
+  &:hover {
+    background: linear-gradient(to right, #66e4fa, #71eee7);
+  }
+}
+
+.register_email_wraper {
+  & > .your_name,
+  & > .form_email_register {
+    margin: auto;
+  }
+
+  .your_name {
+    margin-top: 20px;
+
+    .your_name--item {
+      outline: none;
+      border: 1px solid #ccc;
+      border-radius: 25px;
+      background-color: #f1f1f2;
+    }
+  }
+}
+
+.resend_code {
+  border-radius: 25px;
+  background-color: #cccccc;
+}
+
+.your_name--item.error,
+.form_email_item.error {
+  border: 1px solid red !important;
+}

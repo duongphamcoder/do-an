@@ -1,0 +1,18 @@
+.error_back_btn {
+    padding: 25px 40px;
+    
+    & > span {
+        display: inline-flex;
+        align-items: center;
+        padding: 5px 15px;
+        background-color: #77BEAB;
+        border-radius: 8px;
+        color: #fff;
+        box-shadow: 3px 3px 2px  rgba($color: #000000, $alpha: 0.4);
+        cursor: pointer;
+        & > ion-icon{
+            padding: 0 5px 0 0;
+        }
+    }
+
+}
