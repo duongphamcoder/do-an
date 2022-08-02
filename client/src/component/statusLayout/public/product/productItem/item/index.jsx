@@ -3,6 +3,7 @@ import { useParams, Link, useSearchParams } from "react-router-dom";
 import axios from "axios";
 import { useState } from "react";
 function ProductItem() {
+  const { category } = useParams();
   const [id, setID] = useSearchParams();
   const [products, setProducts] = useState();
   useEffect(() => {
@@ -30,7 +31,7 @@ function ProductItem() {
                   key={item._id}
                 >
                   <Link
-                    to={`/product/nike/detail?id=${item._id}`}
+                    to={`/product/${category}/detail?id=${item._id}`}
                     className="home_list_product--item mt-3  block"
                   >
                     <div

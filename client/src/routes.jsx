@@ -12,6 +12,7 @@ import Product from "./component/statusLayout/public/product/index";
 import ProductInCategory from "./component/statusLayout/public/product/productItem/productInCategory";
 import Details from "./component/statusLayout/public/product/productItem/details";
 import Profile from "./component/statusLayout/private/profile";
+import Cart from "./component/statusLayout/private/cart";
 import Admin from "./component/other";
 import AdminWrap from "./component/other/AdminWrap";
 import AdminHome from "./component/other/componentChildren/home";
@@ -65,6 +66,13 @@ export const Router = [
   {
     path: "/user/profile",
     element: <Profile />,
+    childrenOf: null,
+    status: Private,
+    defaultLayout: DefaultLayout,
+  },
+  {
+    path: "/user/cart",
+    element: <Cart />,
     childrenOf: null,
     status: Private,
     defaultLayout: DefaultLayout,

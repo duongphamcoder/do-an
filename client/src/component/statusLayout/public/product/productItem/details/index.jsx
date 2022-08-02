@@ -109,6 +109,9 @@ function Details() {
                       searchParams.get("id"),
                       selectSize + 1 ? sizes[selectSize]._id : "",
                       1,
+                      Boolean(selectSize + 1)
+                        ? amountOfSize[selectSize].amount
+                        : 0,
                       redirect
                     );
                   }}

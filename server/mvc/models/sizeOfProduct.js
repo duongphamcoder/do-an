@@ -27,6 +27,16 @@ class SizeOfProductModel {
     return await model.find({ product_id: _id });
   }
 
+  async getSizeOfProductByParams(obj) {
+    const model = this.init();
+    return await model.findOne(obj);
+  }
+
+  async getSizeOfProductById(_id) {
+    const model = this.init();
+    return await model.findById(_id);
+  }
+
   async addSizeOfProduct(product_id, size_id, amount) {
     const model = this.init();
     const temp = new model({
@@ -42,6 +52,14 @@ class SizeOfProductModel {
       .save()
       .then((req) => false)
       .catch((error) => true);
+  }
+
+  async updateQuantitySizeOfProduct(_id, amount) {
+    const model = this.init();
+    const result = await (await model.updateOne({ _id }, { amount }))
+      .then((res) => false)
+      .catch((err) => true);
+    return result;
   }
 }
 

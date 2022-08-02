@@ -1,19 +1,24 @@
 const mongoose = require("mongoose");
 const ProductModel = require("./product");
+const SizeOfProductModel = require("./sizeOfProduct");
+const SizeModel = require("./size");
 const Cart = new mongoose.Schema(
   {
     user_id: {
       type: String,
     },
-    product_id: {
+    product_id_detail: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "Products",
+      ref: "SizeOfProducts",
     },
     quantity: {
       type: Number,
       default: 1,
     },
     total: {
+      type: Number,
+    },
+    price_one_product: {
       type: Number,
     },
     status: {
@@ -31,64 +36,121 @@ class CartModel {
 
   async getCart(user_id) {
     const model = this.init();
-    return await model.find({ user_id, status: 0 });
+    const cartResult = await model.find({ user_id, status: 0 });
+    // khởi tạo một mảng quer lấy ra thông tin của product như size_id , product_id, số lượng
+    const promises = cartResult.map((item) => {
+      const { product_id_detail } = item;
+      return SizeOfProductModel.getSizeOfProductByParams(product_id_detail);
+    });
+    // thực hiện công việc query ở trên song song với nhau để lấy ra kết quả
+    const promisesResult = await Promise.all(promises);
+    // khởi tạo một mảng query lấy ra chi tiết thông tin của sản phẩm
+    const promise2s = promisesResult.map((item) => {
+      const { product_id } = item;
+      return ProductModel.getProductById(product_id);
+    });
+    // thực hiện việc query lấy thông tin product
+    const promise2sResult = await Promise.all(promise2s);
+
+    // khởi tạo một mảng để lấy thông tin của size
+    const promise3s = promisesResult.map((item) => {
+      const { size_id } = item;
+      return SizeModel.getSizeById(size_id);
+    });
+    // thực hiện việc query lấy size
+    const promise3sResult = await Promise.all(promise3s);
+
+    const quantitysAndTotalOfProduct = cartResult.map((item) => {
+      const { quantity, total } = item;
+      return {
+        quantity,
+        total,
+      };
+    });
+    // kết quả cuối cùng để trả về cho client
+    const obj = {
+      products: promise2sResult,
+      sizesOfproduct: promise3sResult,
+      quantitysAndTotalOfProduct,
+    };
+    return obj;
   }
 
-  async addToCart(user_id, product_id, quantity) {
+  async getCartByUserIDAndPRITD(user_id, product_id_detail) {
+    const model = this.init();
+    return await model.findOne({ user_id, product_id_detail, status: 0 });
+  }
+
+  async updateCart(_id, obj) {
+    const model = this.init();
+    const result = await model
+      .updateOne({ _id }, obj)
+      .then((res) => {
+        return {
+          status: true,
+          message: "Update success...",
+        };
+      }) // cập nhật thành công
+      .catch((err) => {
+        return { status: false, message: "Update failed..." };
+      }); // cập nhật thất bại
+    return result;
+  }
+
+  async addToCart(user_id = "", product_id, size_id = "", quantityTemp = "") {
     try {
       const model = this.init();
       const productModel = ProductModel.init();
+      const sizeOfProduct = SizeOfProductModel.init();
 
-      //lấy ra giá của 1 sản phẩm
-      const product = await productModel
-        .findById(product_id)
-        .then((res) => res.price.replaceAll(".", ""))
-        .catch((err) => "");
-      /*
-        + tìm kiếm sản phẩm đó đã có trong giỏ hay chưa
-        + nếu tìm thấy thì sẽ trả lại _id của giỏ hàng đó và
-          số lượng sản phẩm đã thêm trong giỏ để thực hiện việc cập nhật lại
-          số lượng trong giỏ
-        + nếu không tìm thấy thì trả về mảng rỗng và tiến hành thêm mới vào giỏ
-      */
-      const find = await model
-        .findOne({ user_id, product_id })
-        .then((res) => {
-          return {
-            _id: res._id,
-          };
+      // lấy số tiền của 1 sản phẩm
+      const price_one_product = +(
+        await ProductModel.getProductById(product_id)
+      ).price.replaceAll(".", "");
+
+      // lấy thông tin size của sản phẩm
+      const resultQrSizeOfProduct = (
+        await SizeOfProductModel.getSizeOfProductByParams({
+          product_id,
+          size_id,
         })
-        .catch((err) => {
-          return {};
-        });
-
-      /* 
-          - tiếp theo:
-            + nếu sản phẩm đã có trong giỏ thì ta tiến hành cập nhật lại số lượng và giá
-              * trả về status 1 (để nhận biết là bạn cập nhật lại số lượng sản phẩm trong giỏ)
-            + nếu sản phẩm chưa có trong giỏ thì tiến hành thêm mới
-              * trả về status 0 (để nhận biết bạn thêm mới mốt sản phẩm vào giỏ)
-      */
-      if (Object.keys(find).length) {
-        const { _id } = find;
-        const newAmount = +quantity;
-        const total = newAmount * +product;
-        const result = await model.updateOne(
-          { _id },
-          { quantity: newAmount, total }
-        );
-        return 1;
-      }
-
-      const total = quantity * +product;
-      const cart = new model({
+      )._id;
+      // kiểu tra xem sản phẩm đó có tồn tại hay chưa
+      const find = await this.getCartByUserIDAndPRITD(
         user_id,
-        product_id,
-        quantity,
-        total,
-      });
-      await cart.save();
-      return 0;
+        resultQrSizeOfProduct
+      );
+
+      // xử lý khi chưa có sản phẩm trong giỏ
+      if (!find) {
+        var total = price_one_product * quantityTemp;
+        const Obj = {
+          user_id,
+          product_id_detail: resultQrSizeOfProduct,
+          quantity: quantityTemp,
+          price_one_product,
+          total,
+        };
+        const cart = new model(Obj);
+        const resultAfterSave = await cart
+          .save()
+          .then((res) => {
+            return { status: true, message: "Add success..." };
+          }) // thêm thành công
+          .catch((err) => {
+            return { status: false, message: "Add failed..." };
+          }); // thêm thất bại
+        return resultAfterSave;
+      } else {
+        const { _id, quantity } = find;
+        const newQuantity = quantity + +quantityTemp;
+        const newTotal = price_one_product * newQuantity;
+        const resultUpdateCart = await this.updateCart(_id, {
+          quantity: newQuantity,
+          total: newTotal,
+        });
+        return resultUpdateCart;
+      }
     } catch (error) {
       console.log(error);
     }

@@ -46,6 +46,21 @@ class ProductControllers {
       });
     } catch (error) {}
   }
+
+  async updateStatusProduct(req, res) {
+    try {
+      const { product_id, status } = req.body;
+      const result = await ProductModel.updateStatusProduct(product_id, status);
+      return res.json({
+        err: result,
+        message: !result ? "Success..." : "Failed...",
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  async updateQuantityProduct(req, res) {}
 }
 
 module.exports = new ProductControllers();

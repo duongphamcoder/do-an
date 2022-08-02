@@ -69,6 +69,20 @@ class ProductModel {
     const categorys = await CategoryModel.getAllCategory();
     console.log(categorys);
   }
+
+  async updateStatusProduct(product_id, status) {
+    try {
+      const model = this.init();
+      const result = await model
+        .updateOne({ _id: product_id }, { status })
+        .then((res) => false)
+        .catch((err) => true);
+
+      return result;
+    } catch (error) {
+      console.log(error);
+    }
+  }
 }
 
 module.exports = new ProductModel();

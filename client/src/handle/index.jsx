@@ -133,12 +133,29 @@ class Hanlde {
   }
 
   // xử lý thêm vào giỏ hàng
-  handleAddToCart(product_id, size, amount, redirect) {
+  async handleAddToCart(product_id, size_id, quantity, warehouse, redirect) {
     if (auth.currentUser) {
-      if (!Boolean(size)) {
-        alert(`chưa chọn size ${size}`);
+      if (!Boolean(size_id)) {
+        alert(`Vui long chon size`);
+      } else if (warehouse === 0) {
+        alert("Sản phẩm hiện đã hết" + warehouse);
       } else {
-        alert(`bạn đã chọn size có id: ${size}`);
+        const respone = (
+          await axios.post(
+            `${process.env.REACT_APP_URI_SERVER}/user/add-to-cart`,
+            {
+              user_id: auth.currentUser.uid,
+              product_id,
+              size_id,
+              quantity,
+            }
+          )
+        ).data.result;
+        if (respone.status) {
+          alert("Thêm thành công");
+        } else {
+          alert("Thêm thất bại");
+        }
       }
     } else {
       redirect("/form/login");

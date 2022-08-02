@@ -1,14 +1,16 @@
 const CategoryModel = require("../models/category");
 const ProductModel = require("../models/product");
 const CartModel = require("../models/cart");
+const SizeOfProductModel = require("../models/sizeOfProduct");
 
 class OtherControllers {
   // xử lý trả dữ liệu cho Home
   async index(req, res) {
     try {
       const result = await CategoryModel.getAllCategory();
+      console.log(result);
+      const productModel = ProductModel.init();
       const promise = result.map((item) => {
-        const productModel = ProductModel.init();
         const category_id = item._id;
         return productModel
           .find({ category_id, status: 0 })
@@ -33,8 +35,13 @@ class OtherControllers {
 
   async addToCart(req, res) {
     try {
-      const { user_id, product_id, quantity } = req.body;
-      const result = await CartModel.addToCart(user_id, product_id, quantity);
+      const { user_id, product_id, quantity, size_id } = req.body;
+      const result = await CartModel.addToCart(
+        user_id,
+        product_id,
+        size_id,
+        quantity
+      );
       return res.status(200).json({ result });
     } catch (error) {
       console.log(error);
@@ -61,6 +68,14 @@ class OtherControllers {
     } catch (error) {
       console.log(error);
     }
+  }
+
+  async getDetailSizeOfProduct(req, res) {
+    const sizeOfProductId = req.query.id;
+    const result = await SizeOfProductModel.getSizeOfProductById(
+      sizeOfProductId
+    );
+    return result;
   }
 }
 
